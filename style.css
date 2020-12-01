@@ -1,0 +1,166 @@
+body{ margin:0;
+    background-color: #111;
+    color:white;
+    font-family: 'Helvetica Neue', Helvetica,Arial, sans-serif;
+}
+.original__movies{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.original__movies, .movies__container{
+    padding-left: 50px;
+    display: flex;
+    overflow-x: scroll;
+}
+ 
+.original__movies::-webkit-scrollbar {
+    display: none;
+  }
+.original__movies img {
+    margin-right: 10px;
+    height: 250px;
+    width: auto;
+}
+
+.original__movies img, .movies__container img{
+    transition: all 0.2s ease-out;
+    cursor:pointer;
+}
+
+.original__movies img:hover, .movies__container img:hover{
+  transform: scale(1.2);
+}
+
+
+.movies__container img{
+    margin-right: 10px;
+    width:200px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+   padding-top: 15px;
+}
+
+.logo > img {
+    width:120px;
+}
+.profile > img {
+    width:40px;
+}
+img{
+    width:100px;
+}
+
+
+/* .original__movies {
+    overflow-x: scroll;
+    white-space: nowrap;
+} */
+/* .trending__movies {
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.toprated__movies {
+    overflow-x: scroll;
+    white-space: nowrap;
+} */
+
+ .featured{
+     height:400px;
+     position: relative;
+     background-image:url('https://occ-0-1327-1328.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcSScyVLzRbU-aJmQhN_pXNUpbVbpSxEJXzKsS2vZdVIHvtl48mvfFJEHo6lHWtDT7YrIRYrJLfFvgj1m37B72OdVsUm.jpg?r=657&quo');
+     background-size: cover;
+     background-position: center;
+     padding: 0 0 0 30px;
+     display:flex;
+     flex-direction:column;
+     justify-content:center;
+ }
+ .featured::after{
+     content: "";
+     position:absolute;
+     bottom:0px;
+     left:0px;
+     right:0px;
+     height:7.4rem;
+     background-image: linear-gradient(180deg,transparent,rgb(37,37,37,.61),#111);
+ }
+
+ .netflixOriginals h2 , .movies__header h2{
+     padding-left: 30px;
+ }
+ 
+ .featured h2 {
+     font-size: 50px;
+        margin:0;
+        z-index:10;
+    }
+
+    .featured .featured__buttons{
+     z-index:10;
+    }
+
+    .featured .featured__buttons button {
+    font-size:16px;
+    color:white;
+    background-color: rgba(51,51,51,0.5);
+    border:none;
+    padding:8px 24px;
+    border-radius:4px;
+    }
+
+    .featured::before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background-color: rgba(0,0,0, 0.3);
+      
+       
+
+    }
+    .featured .featured__buttons .button__play{
+        background-color:white;
+        color:black;
+    }
+    .button__play i {
+        margin-right:6px;
+
+    }
+    .featured .feature__description{
+       max-width:350px;
+       font-weight:400;
+       text-shadow:2px 2px 4px rgba(0,0,0,.45); 
+       z-index: 10;
+    }
+     
+    .modal-body iframe{
+       width: 100%;
+    }
+
+    .modal-body span {
+        color: #333;
+        width: 100%;
+        display: flex;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+    }
+   
+   
+
+
