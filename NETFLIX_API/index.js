@@ -3,6 +3,7 @@ const app = express()//initialize express
 const port = 3000 //setting the port
 const mongoose = require('mongoose');
 const { Schema } = mongoose;  //grab the schema object from mongoos
+var cors = require('cors');
 require('dotenv').config()
 
 
@@ -25,6 +26,8 @@ const User = mongoose.model('Users', new Schema(
     }
    })
   );
+
+  app.use(cors());
 
 app.use(express.json());
 //using the get method
@@ -65,7 +68,8 @@ app.post('/login', (req, res) => {
     console.log(user);
     if(user){
       res.send({
-        status: "valid"
+        status: "valid",
+        token: user.id
       });
     } else {
       res.send(404, {

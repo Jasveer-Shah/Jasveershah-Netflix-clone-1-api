@@ -36,3 +36,10 @@ October 1
 - Create Trending now
 - Technology: HTML, JS CSS
 - Icons: font awesome
+
+dec-9
+create a login form
+grab the data
+hash a password
+keep the user logged in
+
