@@ -34,7 +34,7 @@ body{ margin:0;
 }
 
 .original__movies, .movies__container{
-    padding-left: 50px;
+    padding-left: 40px;
     display: flex;
     overflow-x: scroll;
 }
@@ -64,6 +64,7 @@ body{ margin:0;
 .movies__container img{
     margin-right: 10px;
     width:200px;
+    padding-bottom: 6px;
 }
 
 header {
@@ -112,7 +113,7 @@ header {
 } */
 
  .featured{
-     height:400px;
+     height:500px;
      position: relative;
      background-image:url('https://occ-0-1327-1328.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABcSScyVLzRbU-aJmQhN_pXNUpbVbpSxEJXzKsS2vZdVIHvtl48mvfFJEHo6lHWtDT7YrIRYrJLfFvgj1m37B72OdVsUm.jpg?r=657&quo');
      background-size: cover;
@@ -138,15 +139,20 @@ header {
 
  .netflixOriginals h2 , .movies__header h2{
      padding-left: 30px;
+     font-size: 18px;
+     padding-top: 3px;
  }
  
+ .netflixOriginals h2 {
+     font-size: 30px;
+ }
  .featured h2 {
-     font-size: 20px;
+     font-size: px;
         margin:0;
         z-index:10;
     }
 
-    .featured .featured__buttons{
+    .feat15ured .featured__buttons{
      z-index:10;
     }
 
