@@ -43,3 +43,23 @@ grab the data
 hash a password
 keep the user logged in
 
+January14,2021
+create a wishlist
+Backend-
+Add the ability to add to a wishlist
+create a new collection in mongoDB for wishlist
+collection will have UserId and MovieId
+validate the user
+we need to create a route for wishlist
+we can post to wishlist
+Return wishlist response
+Front End
+Button to add to wishlist
+show wishlist as a category
+add it inside the category
+fetch the wishlist data from API
+
+
+
+
+

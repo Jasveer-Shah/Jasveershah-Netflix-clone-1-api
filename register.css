@@ -10,10 +10,6 @@ body {
     padding-right: 68px; */
 }
 
-.registered-alert {
-    display: none;
-}
-
 
 .loginContainer {
     width: 450px;
@@ -25,10 +21,6 @@ body {
     padding-right: 68px;
     border-radius: 4px;
     background-color: rgba(0,0,0,.75);
-}
-
-.loginContainer a {
-    color: white;
 }
 
 

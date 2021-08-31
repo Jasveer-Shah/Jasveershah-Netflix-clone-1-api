@@ -6,7 +6,32 @@ window.onload = () =>  {
     getTopRated();
     getGenres();
     letVarExample();
+    getWishList();
     // console.log(firstName)
+}
+
+function getWishList() {
+    fetch("http://localhost:3000/wishlist", {
+        headers: {
+            Authorization: `${localStorage.getItem('token')}`
+        }
+    })
+    .then((response)=>{
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("something went wrong");
+        }
+    })
+    .then((data)=>{
+        showMovies(data, "#wishlist", "backdrop_path")
+        // console.log(data)
+    })
+    .catch((error_data)=>{
+        logOut();
+        // console.log(error_data);
+    })
+
 }
 
 function letVarExample(firstName = "Jasveer"){
@@ -93,6 +118,7 @@ showMovies = (movies, element_selector, path_type ) => {
         });
         moviesEl.appendChild(imageElement);
     }
+ }
 }
 function fetchMoviesBasedOnGenre(genreId){
     var url = "https://api.themoviedb.org/3/discover/movie?";
@@ -255,6 +281,7 @@ function getGenres(){
         console.log(error_data);
     })
 }
+
 function getOriginals(){
     var url = "https://api.themoviedb.org/3/discover/tv?api_key=19f84e11932abbc79e6d83f82d6d1045&with_networks=213";
     fetchMovies(url, ".original__movies", "poster_path");
@@ -267,10 +294,15 @@ function getTopRated(){
     var url = "https://api.themoviedb.org/3/movie/top_rated?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&page=1";
     fetchMovies(url, "#top_rated", "backdrop_path");
 }
+
+
 // Loop through list of genres 
 //     Show genres in HTML
 //     Fetch movies based on genre fetchMovies(url, genre, classInHTML)
 //     Display the list of movies
+
+
 // https://api.themoviedb.org/3/discover/movie?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=28
+
 // Movies genres
-// https://api.themoviedb.org/3/genre/movie/list?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US";
+// https://api.themoviedb.org/3/genre/movie/list?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US

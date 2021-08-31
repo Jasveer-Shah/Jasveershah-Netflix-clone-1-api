@@ -1,11 +1,16 @@
 function checkIfLoggedIn(){
     const currentToken = localStorage.getItem('token');
     if(currentToken){
-        if(location.href == "http://127.0.0.1:5501/login.html"){
+        if(location.href.includes("/login.html")
+        || location.href.includes("/register.html")){
             location.href = "/";
         }
     } else {
-        if(location.href == "http://127.0.0.1:5501/") {
+        //if I am currently not logged in
+        //and trying to access an unauthorized page
+        //(trying to access all pages besides login)
+        if(!location.href.includes("/login.html")
+        && !location.href.includes("/register.html")) {
             location.href = '/login.html';
     //     }http://127.0.0.1:5501/login.html http://127.0.0.1:5501/login.html
       } 
