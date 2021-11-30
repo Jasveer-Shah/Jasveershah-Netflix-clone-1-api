@@ -1,5 +1,5 @@
 var firstName = "Jasveer"
-// Called whe the page is loaded
+// Called when the page is loaded
 window.onload = () =>  {
     getOriginals();
     getTrendingNow();
@@ -75,6 +75,7 @@ async function getMovieTrailer(id) {
 const setTrailer = (trailers) => {
     const iframe = document.getElementById('movieTrailer');
     const movieNotFound = document.querySelector('.movieNotFound');
+
     if(trailers.length > 0 ){
         movieNotFound.classList.add('d-none');
         iframe.classList.remove('d-none');
@@ -82,11 +83,20 @@ const setTrailer = (trailers) => {
     } else {
         iframe.classList.add('d-none');
         movieNotFound.classList.remove('d-none');
-    }
-}
+       }
+     
+      }
+
 const handleMovieSelection = (e) => {
+    
     const id = e.target.getAttribute('data-id');
+    const srcc = e.target.getAttribute('src')
+    console.log(srcc)
+    const banner = document.querySelector('.featured');
     const iframe = document.getElementById('movieTrailer');
+   
+        banner.style.backgroundImage = `url(${srcc})`;
+   
     // here we need the id of the movie
     getMovieTrailer(id).then((data)=>{
         const results = data.results;
@@ -97,10 +107,14 @@ const handleMovieSelection = (e) => {
                 return false;
             }
         })
+     
         setTrailer(youtubeTrailers);
+        
+
     });
     // open modal
     $('#trailerModal').modal('show')
+   
     // we need to call the api with the ID 
 }
 
@@ -116,6 +130,7 @@ showMovies = (movies, element_selector, path_type ) => {
         imageElement.addEventListener('click', (e)=>{
             handleMovieSelection(e); 
         });
+
         moviesEl.appendChild(imageElement);
     }
  }
@@ -179,7 +194,7 @@ function showMoviesBasedOnGenre(genreName, movies){
         imageElement.setAttribute('data-id', movie.id);
         imageElement.src = `https://image.tmdb.org/t/p/original${movie["backdrop_path"]}`;
         let { backdrop_path, id } = movie;
-        console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
+        // console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
         imageElement.setAttribute('data-id', id );
 
 
@@ -250,7 +265,7 @@ function showMoviesBasedOnGenre(genreName, movies){
         imageElement.setAttribute('data-id', movie.id);
         imageElement.src = `https://image.tmdb.org/t/p/original${movie["backdrop_path"]}`;
         let { backdrop_path, id } = movie;
-        console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
+        // console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
         imageElement.setAttribute('data-id', id );
 
 
