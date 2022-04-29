@@ -9,13 +9,14 @@ require('dotenv').config()
 
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.rutnr.mongodb.net/netflix-api-db-dev?retryWrites=true&w=majority`, {
-  useCreateIndex: true, 
-  useUnifiedTopology: true, 
+  useCreateIndex: true,
+  useUnifiedTopology: true,
   useNewUrlParser: true
 });
 
 const User = mongoose.model('Users', new Schema(
-  { name: String, 
+  {
+    name: String,
     email: {
       type: String,
       required: true,
@@ -23,29 +24,29 @@ const User = mongoose.model('Users', new Schema(
     },
     password: {
       type: String,
-    required: true
+      required: true
     }
-   })
-  );
+  })
+);
 
- const WishListSchema = new Schema(
-    {
-       user:{
-      type:Schema.Types.ObjectId,
+const WishListSchema = new Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
       ref: 'Users'
-    }, 
-      movieId: Number,
-      backdrop_path: String,
-      title: String,
-      // password: {
-      //   type: String,
-      // required: true
-      // }
-     })
+    },
+    movieId: Number,
+    backdrop_path: String,
+    title: String,
+    // password: {
+    //   type: String,
+    // required: true
+    // }
+  })
 
- WishListSchema.index({ user: 1, movieId:1 } , { unique: true }) 
+WishListSchema.index({ user: 1, movieId: 1 }, { unique: true })
 
- const WishList =  mongoose.model('WishList', WishListSchema); 
+const WishList = mongoose.model('WishList', WishListSchema);
 
 
 
@@ -53,17 +54,17 @@ app.use(cors());
 
 app.use(express.json());
 
-   function authenticateToken(req, res, next){
-     console.log(req.headers);
-     const authHeaderToken = req.headers['authorization']
-     if(!authHeaderToken) return res.sendStatus(401);
+function authenticateToken(req, res, next) {
+  console.log(req.headers);
+  const authHeaderToken = req.headers['authorization']
+  if (!authHeaderToken) return res.sendStatus(401);
 
-   jwt.verify(authHeaderToken, "elephant12345678", (err, user)=>{
-     if(err) return res.sendStatus(403);
+  jwt.verify(authHeaderToken, "elephant12345678", (err, user) => {
+    if (err) return res.sendStatus(403);
     //  console.log(user)
-     req.user = user;
-     next()
-   })
+    req.user = user;
+    next()
+  })
 }
 //using the get method
 //logic for the get request
@@ -72,8 +73,8 @@ app.get('/', (req, res) => {
   res.send("Hello world")
 })
 
-app.post('/wishlist', authenticateToken, (req, res) =>{
-    console.log(req.user);
+app.post('/wishlist', authenticateToken, (req, res) => {
+  console.log(req.user);
   const newWishListItem = new WishList({
     user: req.user.id,
     movieId: req.body.movieId,
@@ -81,32 +82,32 @@ app.post('/wishlist', authenticateToken, (req, res) =>{
     title: req.body.title
   })
 
-  newWishListItem.save((err, wishlistItem)=>{
-     if(err){
-       res.send(400, {
-          status:err
-       })
-     } else {
-       res.send({
+  newWishListItem.save((err, wishlistItem) => {
+    if (err) {
+      res.send(400, {
+        status: err
+      })
+    } else {
+      res.send({
         wishlistItem: wishlistItem,
-         status: "saved"
-       })
-     }
+        status: "saved"
+      })
+    }
   })
   // console.log(req.user);
   // console.log(req.body);
   // res.send({
   //   status: "All Good"
   // })
-}) 
+})
 
 
 
-app.get('/wishlist',  authenticateToken, (req, res) => {
+app.get('/wishlist', authenticateToken, (req, res) => {
   // console.log("I am authenticated")
   // console.log(req.user);
-  WishList.find({ user: req.user.id }, (err, docs)=>{
-    if(err){
+  WishList.find({ user: req.user.id }, (err, docs) => {
+    if (err) {
       res.send(400, {
         status: err
       })
@@ -120,25 +121,25 @@ app.get('/wishlist',  authenticateToken, (req, res) => {
 })
 
 
-app.post('/register', (req, res)=>{
- const newUser = new User({
-   name: req.body.name,
-   email: req.body.email,
-   password: req.body.password
- })
+app.post('/register', (req, res) => {
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  })
 
-  newUser.save((err, user)=>{
-    if(err){                     //err syas user already exists
-                                 // console.log(err);
+  newUser.save((err, user) => {
+    if (err) {                     //err syas user already exists
+      // console.log(err);
       res.send(400, {
         status: err
       })
-    } else{
-      res.send ({
-      status: "registered"
-      } )                                //  console.log("all is good");
-                                    //  console.log(user);
-                                     //  res.send("registered")
+    } else {
+      res.send({
+        status: "registered"
+      })                                //  console.log("all is good");
+      //  console.log(user);
+      //  res.send("registered")
     }
   })
 })
@@ -146,40 +147,41 @@ app.post('/register', (req, res)=>{
 function generateAccessToken(user) {
   const payload = {
     id: user.id,
-    name:user.name
+    name: user.name
   }
-   return jwt.sign(payload, "elephant12345678", { expiresIn: '7200s'})
+  return jwt.sign(payload, "elephant12345678", { expiresIn: '7200s' })
 }
 
 app.post('/login', (req, res) => {
+  console.log(req.body);
   const password = req.body.password;
-  const email = req.body.email; 
-  User.findOne({ email: email, password: password }, (err, user)=>{
-   
-     if(user){
+  const email = req.body.email;
+  User.findOne({ email: email, password: password }, (err, user) => {
+
+    if (user) {
+
       console.log(user);
       const token = generateAccessToken(user);
       console.log(token);
-      res.send({
-        status: "valid",
-        token: token
-      });
+      res.status(200)
+        .send({
+          token: token
+        });
     } else {
-      res.send(404, {
-       status: "NOT FOUND" 
-      });
-    
-     }
-  
-    })
-  
+      res.status(404).send("NOT FOUND")
+    }
   })
-  
-
-
+})
 
 //start our app
 //listning to the port
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+
+
+
+
+
+

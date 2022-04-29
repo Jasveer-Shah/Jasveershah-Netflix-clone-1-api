@@ -1,6 +1,6 @@
 var firstName = "Jasveer"
 // Called when the page is loaded
-window.onload = () =>  {
+window.onload = () => {
     getOriginals();
     getTrendingNow();
     getTopRated();
@@ -10,31 +10,32 @@ window.onload = () =>  {
     // console.log(firstName)
 }
 
+
 function getWishList() {
     fetch("http://localhost:3000/wishlist", {
         headers: {
             Authorization: `${localStorage.getItem('token')}`
         }
     })
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    })
-    .then((data)=>{
-        showMovies(data, "#wishlist", "backdrop_path")
-        // console.log(data)
-    })
-    .catch((error_data)=>{
-        logOut();
-        // console.log(error_data);
-    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        })
+        .then((data) => {
+            showMovies(data, "#wishlist", "backdrop_path")
+            // console.log(data)
+        })
+        .catch((error_data) => {
+            logOut();
+            // console.log(error_data);
+        })
 
 }
 
-function letVarExample(firstName = "Jasveer"){
+function letVarExample(firstName = "Jasveer") {
     // Melissas Address 
     const address = {
         street: "4005 Test rd.",
@@ -63,255 +64,263 @@ function letVarExample(firstName = "Jasveer"){
 
 async function getMovieTrailer(id) {
     var url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`
-    return await fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    })
+    return await fetch(url)          // this returns to getMoviesTrailer() otherwise its fonna give me undefined
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        })
 }
 const setTrailer = (trailers) => {
     const iframe = document.getElementById('movieTrailer');
     const movieNotFound = document.querySelector('.movieNotFound');
 
-    if(trailers.length > 0 ){
+    if (trailers.length > 0) {
         movieNotFound.classList.add('d-none');
         iframe.classList.remove('d-none');
+        // dynamic link for embeding you tube
         iframe.src = `https://www.youtube.com/embed/${trailers[0].key}`
     } else {
         iframe.classList.add('d-none');
         movieNotFound.classList.remove('d-none');
-       }
-     
-      }
+    }
+
+}
 
 const handleMovieSelection = (e) => {
-    
+    // const titleEl = document.getElementById("title");
+    //     titleEl.innerText = movie.title;
     const id = e.target.getAttribute('data-id');
     const srcc = e.target.getAttribute('src')
     console.log(srcc)
+
     const banner = document.querySelector('.featured');
     const iframe = document.getElementById('movieTrailer');
-   
-        banner.style.backgroundImage = `url(${srcc})`;
-   
+
+    banner.style.backgroundImage = `url(${srcc})`;
+    // var overviewEle = document.querySelector(".feature__description");
+
     // here we need the id of the movie
-    getMovieTrailer(id).then((data)=>{
+    getMovieTrailer(id).then((data) => {
         const results = data.results;
-        const youtubeTrailers = results.filter((result)=>{
-            if(result.site == "YouTube" && result.type == "Trailer"){
+        const youtubeTrailers = results.filter((result) => {
+            if (result.site == "YouTube" && result.type == "Trailer") {
                 return true;
             } else {
                 return false;
             }
         })
-     
+
         setTrailer(youtubeTrailers);
-        
+
 
     });
     // open modal
     $('#trailerModal').modal('show')
-   
+
     // we need to call the api with the ID 
 }
 
-function showMovies(movies, element_selector, path_type ){
-showMovies = (movies, element_selector, path_type ) => {
-    var moviesEl = document.querySelector(element_selector);
-    for(var movie of movies.results){
-        var imageElement = document.createElement('img');
-        imageElement.setAttribute('data-id', movie.id);
+function showMovies(movies, element_selector, path_type) {
+    showMovies = (movies, element_selector, path_type) => {
+        var moviesEl = document.querySelector(element_selector);
+        for (var movie of movies.results) {
+            var imageElement = document.createElement('img');
+            imageElement.setAttribute('data-id', movie.id);
+            var overviewEle = document.querySelector(".feature__description");
+            imageElement.src = `https://image.tmdb.org/t/p/original${movie[path_type]}`;
 
-        imageElement.src = `https://image.tmdb.org/t/p/original${movie[path_type]}`;
+            imageElement.addEventListener('click', (e) => {
+                handleMovieSelection(e);
+            });
 
-        imageElement.addEventListener('click', (e)=>{
-            handleMovieSelection(e); 
-        });
-
-        moviesEl.appendChild(imageElement);
+            moviesEl.appendChild(imageElement);
+            moviesEl.appendChild(overviewEle);
+        }
     }
- }
 }
-function fetchMoviesBasedOnGenre(genreId){
+function fetchMoviesBasedOnGenre(genreId) {
     var url = "https://api.themoviedb.org/3/discover/movie?";
     url += "api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
     url += `&with_genres=${genreId}`;
     return fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    }) // returns a promise already
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        }) // returns a promise already
 }
-function fetchMovies(url, element_selector, path_type ){
+function fetchMovies(url, element_selector, path_type) {
     fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    })
-    .then((data)=>{
-        showMovies(data, element_selector, path_type);
-    })
-    .catch((error_data)=>{
-        console.log(error_data);
-    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        })
+        .then((data) => {
+            showMovies(data, element_selector, path_type);
+        })
+        .catch((error_data) => {
+            console.log(error_data);
+        })
 }
-function showMoviesGenres(genres){
-    genres.genres.forEach(function(genre){
+function showMoviesGenres(genres) {
+    genres.genres.forEach(function (genre) {
         // get list of movies
         var movies = fetchMoviesBasedOnGenre(genre.id)
-        movies.then(function(movies){
+        movies.then(function (movies) {
             showMoviesBasedOnGenre(genre.name, movies);
-        }).catch(function(error){
+        }).catch(function (error) {
             console.log("BAD BAD", error);
         })
         // show movies based on genre
     })
 }
-function showMoviesBasedOnGenre(genreName, movies){
+function showMoviesBasedOnGenre(genreName, movies) {
     let allMovies = document.querySelector('.movies');
     let genreEl = document.createElement('div');
     genreEl.classList.add('movies__header');
-   
-    genreEl.innerHTML =`
+
+    genreEl.innerHTML = `
         <h2>${genreName}</h2>
     `
     let moviesEl = document.createElement('div');
     moviesEl.classList.add('movies__container');
     moviesEl.setAttribute('id', genreName);
 
-    for(var movie of movies.results){
+    for (var movie of movies.results) {
 
         var imageElement = document.createElement('img');
         imageElement.setAttribute('data-id', movie.id);
         imageElement.src = `https://image.tmdb.org/t/p/original${movie["backdrop_path"]}`;
         let { backdrop_path, id } = movie;
         // console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
-        imageElement.setAttribute('data-id', id );
+        imageElement.setAttribute('data-id', id);
 
 
-        imageElement.src = `https://image.tmdb.org/t/p/original${ backdrop_path}`;
+        imageElement.src = `https://image.tmdb.org/t/p/original${backdrop_path}`;
 
-        imageElement.addEventListener('click', (e)=>{
+        imageElement.addEventListener('click', (e) => {
             handleMovieSelection(e);
         });
         moviesEl.appendChild(imageElement);
     }
 }
-function fetchMoviesBasedOnGenre(genreId){
+function fetchMoviesBasedOnGenre(genreId) {
     var url = "https://api.themoviedb.org/3/discover/movie?";
     url += "api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
     url += `&with_genres=${genreId}`;
     return fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    }) // returns a promise already
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        }) // returns a promise already
 }
-function fetchMovies(url, element_selector, path_type ){
+function fetchMovies(url, element_selector, path_type) {   // start here by giving parameters
     fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    })
-    .then((data)=>{
-        showMovies(data, element_selector, path_type);
-    })
-    .catch((error_data)=>{
-        console.log(error_data);
-    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        })
+        .then((data) => {
+            showMovies(data, element_selector, path_type);
+        })
+        .catch((error_data) => {
+            console.log(error_data);
+        })
 }
-function showMoviesGenres(genres){
-    genres.genres.forEach(function(genre){
+function showMoviesGenres(genres) {
+    genres.genres.forEach(function (genre) {
         // get list of movies
         var movies = fetchMoviesBasedOnGenre(genre.id)
-        movies.then(function(movies){
+        movies.then(function (movies) {
             showMoviesBasedOnGenre(genre.name, movies);
-        }).catch(function(error){
+        }).catch(function (error) {
             console.log("BAD BAD", error);
         })
         // show movies based on genre
     })
 }
-function showMoviesBasedOnGenre(genreName, movies){
+function showMoviesBasedOnGenre(genreName, movies) {
     let allMovies = document.querySelector('.movies');
     let genreEl = document.createElement('div');
     genreEl.classList.add('movies__header');
-  
-    genreEl.innerHTML =`
+
+    genreEl.innerHTML = `
         <h2>${genreName}</h2>
     `
     let moviesEl = document.createElement('div');
     moviesEl.classList.add('movies__container');
     moviesEl.setAttribute('id', genreName);
 
-    for(var movie of movies.results){
+    for (var movie of movies.results) {
 
         var imageElement = document.createElement('img');
         imageElement.setAttribute('data-id', movie.id);
         imageElement.src = `https://image.tmdb.org/t/p/original${movie["backdrop_path"]}`;
         let { backdrop_path, id } = movie;
         // console.log("TESTING DESCONSTRUCT:", id, backdrop_path);
-        imageElement.setAttribute('data-id', id );
 
 
-        imageElement.src = `https://image.tmdb.org/t/p/original${ backdrop_path}`;
 
-        imageElement.addEventListener('click', (e)=>{
-            handleMovieSelection(e); 
+
+        imageElement.setAttribute('data-id', id);
+
+        imageElement.src = `https://image.tmdb.org/t/p/original${backdrop_path}`;
+
+        imageElement.addEventListener('click', (e) => {
+            handleMovieSelection(e);
         });
         moviesEl.appendChild(imageElement);
     }
     allMovies.appendChild(genreEl);
     allMovies.appendChild(moviesEl);
 }
-function getGenres(){
+function getGenres() {
     var url = "https://api.themoviedb.org/3/genre/movie/list?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US";
     fetch(url)
-    .then((response)=>{
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("something went wrong");
-        }
-    })
-    .then((data)=>{
-        showMoviesGenres(data);
-    })
-    .catch((error_data)=>{
-        console.log(error_data);
-    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("something went wrong");
+            }
+        })
+        .then((data) => {
+            showMoviesGenres(data);
+        })
+        .catch((error_data) => {
+            console.log(error_data);
+        })
 }
 
-function getOriginals(){
+function getOriginals() {
     var url = "https://api.themoviedb.org/3/discover/tv?api_key=19f84e11932abbc79e6d83f82d6d1045&with_networks=213";
     fetchMovies(url, ".original__movies", "poster_path");
 }
-function getTrendingNow(){
+function getTrendingNow() {
     var url = "https://api.themoviedb.org/3/trending/movie/week?api_key=19f84e11932abbc79e6d83f82d6d1045";
-    fetchMovies(url, '#trending', 'backdrop_path' );
+    fetchMovies(url, '#trending', 'backdrop_path');
 }
-function getTopRated(){
+function getTopRated() {
     var url = "https://api.themoviedb.org/3/movie/top_rated?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&page=1";
     fetchMovies(url, "#top_rated", "backdrop_path");
 }
 
 
-// Loop through list of genres 
+// Loop through list of genres
 //     Show genres in HTML
 //     Fetch movies based on genre fetchMovies(url, genre, classInHTML)
 //     Display the list of movies
